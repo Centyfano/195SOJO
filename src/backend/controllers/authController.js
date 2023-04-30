@@ -27,7 +27,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    console.log('hitting login', req.body);
     const user = await User.findOne({ email: req.body.email });
     try {
         if (!user) {
@@ -37,7 +36,6 @@ const login = async (req, res) => {
         if (!validPassword) {
             return res.status(400).send("Wrong email or password");
         }
-        console.log('hello', user._id,{d:process.env.TOKEN});
         
         const token = jwt.sign({_id: user._id}, process.env.TOKEN, {
             expiresIn: "60m",
@@ -46,7 +44,6 @@ const login = async (req, res) => {
             httpOnly: false,
             maxAge: 24 * 60 * 60 * 1000, //1 day
         })
-        console.log('helo', );
 
         return res.status(200).json(token)
     } catch (err) {
