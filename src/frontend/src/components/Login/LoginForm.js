@@ -23,10 +23,10 @@ export function LoginForm() {
       const res = await axios.post("http://localhost:4000/api/auth/login", {
       email: email,
       password: password
-    // }, { withCredentials: true }).then((response, err) => {
-    //   console.log(response);
-    //   navigate('/main');
-      })
+    }, { withCredentials: true }).then((response, err) => {
+      console.log(response);
+      navigate('/main');
+    })
       console.log(res)
       signIn({
         token: res.data,

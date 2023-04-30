@@ -42,6 +42,11 @@ export function EditMyAccount() {
       const { firstName, lastName, email, password } = data;
       const putData = { firstName, lastName, email, password };
     }
+  const handleSubmit =(e) => {
+    e.preventDefault();
+    navigate('/payment');
+    
+  }
     const edit = async (e) => {
         e.preventDefault(); 
         try {
@@ -51,12 +56,8 @@ export function EditMyAccount() {
           email: email,
           password: password,
         }, {headers: {
-<<<<<<< HEAD
             'Content-Type': 'application/json',
-            'authorization':`bearer ${Cookies.get('jwt')}`
-=======
             'authorization':`bearer ${Cookies.get('_auth')}`
->>>>>>> 2e661848a5dcd89e3fb14eb58debc62d9803fef6
           }}).then((response, err) => {
           console.log("Successfully updated account!");
           navigate('/main');          
@@ -64,39 +65,6 @@ export function EditMyAccount() {
           console.log(JSON.stringify(error));
         }
       };
-<<<<<<< HEAD
-
-      //handle submit
-      const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const data = new FormData(e.target.value);
-        const newPassword = data.get('newPassword');
-        
-        if (newPassword === password) {
-          setShowError(true);
-          setPasswordError("Password already exists!")
-        }
-        else {
-          setShowError('');
-        }
-
-        if (newPassword !== password) {
-          if (newPassword === '') {
-            const editData = {
-              firstName: data.get('firstName'),
-              lastName: data.get('lastName'),
-              email: email,
-              password: data.get('password')
-            };
-            setShowError(false);
-            onChange(editData);
-          }
-        }
-      }
-
-=======
->>>>>>> 2e661848a5dcd89e3fb14eb58debc62d9803fef6
   return (
   <div>
 <MainNav/> 
