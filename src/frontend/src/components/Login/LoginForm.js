@@ -18,26 +18,28 @@ export function LoginForm() {
   const signIn = useSignIn()
 
   const login = async (e) => {
-    e.preventDefault(); 
-    try {
-      const res = await axios.post("http://localhost:4000/api/auth/login", {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:4000/api/auth/login", {
       email: email,
       password: password
-    }, { withCredentials: true }).then((response, err) => {
-      console.log(response);
-      navigate('/main');
-    })
-      console.log(res)
-      signIn({
-        token: res.data,
-        expiresIn: 3600,
-        tokenType: "Bearer",
-        authState: {email: email}})
-        navigate('/main');
-    } catch (error){
-      console.log(JSON.stringify(error));
-    }
-  };
+    }, { withCredentials: true });
+
+    console.log(res);
+
+    signIn({
+      token: res.data.token,
+      expiresIn: 3600,
+      tokenType: "Bearer",
+      authState: {email: email}
+    });
+
+    navigate('/main');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
     <Row>
       <Col>

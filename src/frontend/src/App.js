@@ -71,9 +71,9 @@ function App() {
     <Route path="/orders" element={
     <RequireAuth loginPath='/login'><OrdersPage/>
     </RequireAuth>}/>
-    <Route path="/edit" element={
+    {/* <Route path="/edit" element={
     <RequireAuth loginPath='/login'><EditMyAccount/>
-    </RequireAuth>}/>
+    </RequireAuth>}/> */}
     <Route path="/paymentconfirmation" element={
     <RequireAuth loginPath='/login'><PaymentConfirmation/>
     </RequireAuth>}/>

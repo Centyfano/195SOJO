@@ -5,24 +5,23 @@ import { Row } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { MainNav } from "../components/Main/MainNav";
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-
 export function EditMyAccount() {
+    const location = useLocation();
 
-    const [state, setState] = useState("");
     const [showError, setShowError] = useState(false);
     const [passwordError, setPasswordError] = useState('');
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
+    const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const [user, setUser] = useState([])
     
     /*
     useEffect(() => {( async () => {
@@ -38,6 +37,15 @@ export function EditMyAccount() {
   });
 
   */
+      useEffect(() => {
+      if (location.state) {
+        setFirstName(location.state.firstName);
+        setLastName(location.state.lastName);
+        setEmail(location.state.email);
+        setId(location.state.id);
+      }
+      }, [location.state]);
+  
     const onChange = async (data) => {
       const { firstName, lastName, email, password } = data;
       const putData = { firstName, lastName, email, password };
@@ -49,20 +57,17 @@ export function EditMyAccount() {
   }
     const edit = async (e) => {
         e.preventDefault(); 
-        try {
-          await axios.put(`http://localhost:4000/api/user/change/${user._id}`, {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-        }, {headers: {
+      try {
+        const body = { firstName, lastName, email, password };
+        // if (password.trim() !== '') body.password = password;
+          await axios.put(`http://localhost:4000/api/user/change/${id}`, body, {headers: {
             'Content-Type': 'application/json',
-            'authorization':`bearer ${Cookies.get('_auth')}`
+            'Authorization':`Bearer ${Cookies.get('jwt')}`
           }}).then((response, err) => {
           console.log("Successfully updated account!");
           navigate('/main');          
         })} catch (error){
-          console.log(JSON.stringify(error));
+          console.error(JSON.stringify(error));
         }
       };
   return (
@@ -77,13 +82,13 @@ export function EditMyAccount() {
           
               <Form.Label>First Name</Form.Label>
               <Form.Control 
-                type="firstName" placeholder="First name" onChange={(e) => {setFirstName(e.target.value)}}/>
+                type="firstName" placeholder="First name" value={firstName} onChange={(e) => {setFirstName(e.target.value)}}/>
           </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalLastName">
           <Col>
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="lastName" placeholder="Last name" onChange={(e) => {setLastName(e.target.value)}}/>
+              <Form.Control type="lastName" placeholder="Last name" value={lastName} onChange={(e) => {setLastName(e.target.value)}}/>
           </Col>
       </Form.Group>
 
@@ -92,7 +97,7 @@ export function EditMyAccount() {
               Email
            </Form.Label>
           <Col sm={15}>
-          <Form.Control type="email" placeholder="Email" onChange={(e) => {setEmail(e.target.value)}}/>
+          <Form.Control type="email" value={email} placeholder="Email" onChange={(e) => {setEmail(e.target.value)}}/>
           </Col>
       </Form.Group>
 

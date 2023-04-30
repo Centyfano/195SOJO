@@ -26,7 +26,7 @@ export function MainNav() {
                 <div className='mainNavLinks'>Messages</div>
             </Nav.Link> */}
             <Nav.Link>
-            <Link to ="/edit"><div className='mainNavLinks'>Account</div></Link>
+            <Link to ="/account"><div className='mainNavLinks'>Account</div></Link>
             </Nav.Link>
             <Nav.Link>
             <Link to ="/"><div className='mainNavLinks' onClick={() => signOut()}>Sign Out</div></Link>

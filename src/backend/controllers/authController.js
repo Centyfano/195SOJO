@@ -27,25 +27,28 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+    console.log('hitting login', req.body);
     const user = await User.findOne({ email: req.body.email });
     try {
         if (!user) {
             return res.status(400).send("Email already exists.");
         }
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) {
-        return res.status(400).send("Wrong email or password");
-    }
-    
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN, {
-        expiresIn: "60m",
-    })
-    res.cookie('jwt', token, {
-        httpOnly: false,
-        maxAge: 24 * 60 * 60 * 1000, //1 day
-    })
+        const validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validPassword) {
+            return res.status(400).send("Wrong email or password");
+        }
+        console.log('hello', user._id,{d:process.env.TOKEN});
+        
+        const token = jwt.sign({_id: user._id}, process.env.TOKEN, {
+            expiresIn: "60m",
+        })
+        res.cookie('jwt', token, {
+            httpOnly: false,
+            maxAge: 24 * 60 * 60 * 1000, //1 day
+        })
+        console.log('helo', );
 
-    return res.status(200).json(token)
+        return res.status(200).json(token)
     } catch (err) {
         return res.status(500).json(err);
     }

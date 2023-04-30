@@ -3,13 +3,23 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const currentUser = async (req, res) => {
-    const cookie = req.cookies["_auth"];
-    const claims = jwt.verify(cookie, process.env.TOKEN)
-    if(!claims) {
-        return res.status(401).json("Not Authorized");
+    try {
+        const cookie = req.cookies["jwt"];
+        
+        if (!cookie) {
+            return res.status(401).json("Not Authorized");
+        }
+
+        const claims = jwt.verify(cookie, process.env.TOKEN);
+        if (!claims) {
+            return res.status(401).json("Not Authorized");
+        }
+        const user = await User.findOne({ _id: claims._id })
+        return res.send(user)
+        
+    } catch (error) {
+        return res.status(400).json("bad request");
     }
-    const user = await User.findOne({ _id: claims._id })
-    return res.send(user)
 };
 
 const selectUser = async (req, res) => {
